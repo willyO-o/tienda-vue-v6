@@ -1,5 +1,14 @@
 <script setup>
 
+import useCarritoStore from '@/modules/public/stores/carritoStore'
+
+import { primeraImagen } from '@/utils/productoUtil'
+
+
+
+const carritoStore = useCarritoStore()
+
+
 </script>
 
 
@@ -23,28 +32,22 @@
                 <ul class="navbar-nav navbar-nav-hover ms-auto">
 
                     <li class="nav-item ms-lg-auto">
-                        <RouterLink class="nav-link nav-link-icon me-2"
-                            :to="{name:'Inicio'}"
-                            >
+                        <RouterLink class="nav-link nav-link-icon me-2" :to="{ name: 'Inicio' }">
                             <p class="d-inline text-sm z-index-1 font-weight-bold" data-bs-toggle="tooltip"
                                 data-bs-placement="bottom" title="">Inicio</p>
                         </RouterLink>
                     </li>
 
-     
+
 
                     <li class="nav-item ms-lg-auto">
-                        <RouterLink class="nav-link nav-link-icon me-2"
-                            :to="{name:'Inicio'}"
-                            >
+                        <RouterLink class="nav-link nav-link-icon me-2" :to="{ name: 'Tienda' }">
                             <p class="d-inline text-sm z-index-1 font-weight-bold" data-bs-toggle="tooltip"
                                 data-bs-placement="bottom" title="">Tienda</p>
                         </RouterLink>
                     </li>
                     <li class="nav-item ms-lg-auto">
-                        <RouterLink class="nav-link nav-link-icon me-2"
-                            :to="{name:'Inicio'}"
-                            >
+                        <RouterLink class="nav-link nav-link-icon me-2" :to="{ name: 'Inicio' }">
                             <p class="d-inline text-sm z-index-1 font-weight-bold" data-bs-toggle="tooltip"
                                 data-bs-placement="bottom" title="">Contacto</p>
                         </RouterLink>
@@ -65,43 +68,85 @@
                                 <h6 class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1">
                                     Carrito de Compras
                                 </h6>
-            
-                 
-                                <a href="/pages/author.html" class="dropdown-item border-radius-md">
-                                    <span>Author</span>
+
+
+                                <a v-for="item in carritoStore.carrito" :key="item.id" href="javascript:void(0)"
+                                    class="dropdown-item border-radius-md ps-1 position-relative">
+                                    <div class="d-flex px-2 py-1">
+                                        <div>
+                                            <img :src="primeraImagen(item.imagen)"
+                                                class="avatar avatar-sm rounded me-3">
+                                        </div>
+                                        <div class="d-flex flex-column justify-content-center">
+                                            <h6 class="mb-0 text-xs text-wrap">{{ item.titulo }}</h6>
+                                            <p class="text-xs text-secondary mb-0">
+                                                {{ item.cantidad }} x {{ item.precio }} Bs.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <span @click="carritoStore.eliminarItem(item.id)"
+                                        class="position-absolute end-0 top-0 me-2 mt-2">
+                                        <i class="fas fa-trash text-danger"></i>
+                                    </span>
+
                                 </a>
-                              
-             
+
+                                <div v-if="carritoStore.carrito.length > 0">
+                                    <hr class="border">
+                                    <p class="h6">
+                                        Total: Bs. {{ carritoStore.total }}
+                                    </p>
+                                </div>
+
+                                <div v-else>
+                                    <h5 class="text-center">No tienes productos en el carrito</h5>
+                                </div>
+
+
+
                             </div>
                             <div class="d-lg-none">
                                 <h6 class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1">
-                                    Landing Pages
+                                    Carrito de Compras
                                 </h6>
-                                <a href="/pages/about-us.html" class="dropdown-item border-radius-md">
-                                    <span>About Us</span>
+                                <a v-for="item in carritoStore.carrito" :key="item.id" href="javascript:void(0)"
+                                    class="dropdown-item border-radius-md ps-1 position-relative">
+                                    <div class="d-flex px-2 py-1">
+                                        <div>
+                                            <img :src="primeraImagen(item.imagen)"
+                                                class="avatar avatar-sm rounded me-3">
+                                        </div>
+                                        <div class="d-flex flex-column justify-content-center">
+                                            <h6 class="mb-0 text-xs text-wrap">{{ item.titulo }}</h6>
+                                            <p class="text-xs text-secondary mb-0">
+                                                {{ item.cantidad }} x {{ item.precio }} Bs.
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <span @click="carritoStore.eliminarItem(item.id)"
+                                        class="position-absolute end-0 top-0 me-2 mt-2">
+                                        <i class="fas fa-trash text-danger"></i>
+                                    </span>
+
                                 </a>
-                                <a href="/pages/contact-us.html" class="dropdown-item border-radius-md">
-                                    <span>Contact Us</span>
-                                </a>
-                                <a href="/pages/author.html" class="dropdown-item border-radius-md">
-                                    <span>Author</span>
-                                </a>
-                                <h6
-                                    class="dropdown-header text-dark font-weight-bolder d-flex align-items-center px-1 mt-3">
-                                    Account
-                                </h6>
-                                <a href="/pages/sign-in.html" class="dropdown-item border-radius-md">
-                                    
-                                    <span>Sign In</span>
-                                </a>
+                                <div v-if="carritoStore.carrito.length > 0">
+                                    <hr class="border">
+                                    <p class="h6">
+                                        Total: Bs. {{ carritoStore.total }}
+                                    </p>
+                                </div>
+
+                                <div v-else>
+                                    <h5 class="text-center">No tienes productos en el carrito</h5>
+                                </div>
                             </div>
                         </div>
                     </li>
-   
+
                     <li class="nav-item my-auto ms-3 ms-lg-0">
                         <a href="https://www.creative-tim.com/product/material-kit-pro"
                             class="btn btn-sm  bg-white  mb-0 me-1 mt-2 mt-md-0">
-                           <i class="fas fa-user"></i>
+                            <i class="fas fa-user"></i>
                             Login
                         </a>
                     </li>

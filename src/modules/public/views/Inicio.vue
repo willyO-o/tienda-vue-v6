@@ -3,7 +3,8 @@ import { onMounted, ref } from 'vue'
 
 
 import { getProductos } from '@/services/productoService'
-import { primeraImagen, truncarTexto } from '@/utils/productoUtil'
+
+import Tarjeta from '@/modules/public/components/Tajerta.vue'
 
 
 const productos = ref([])
@@ -39,33 +40,7 @@ onMounted( async ()=>{
                 <div class="row align-items-center">
 
 
-
-                    <div
-                        v-for="item in productos" :key="item.id"
-                    
-                    class="col-lg-4 ms-auto mt-lg-0 mt-4">
-                        <div class="card">
-                            <div class="card-header p-0 position-relative mt-2 mx-2 z-index-2">
-                                <a class="d-block blur-shadow-image">
-                                    <img :src="primeraImagen(item.imagen)"
-                                        alt="img-colored-shadow" width="100%" class="img-fluid border-radius-lg">
-                                </a>
-                            </div>
-                            <div class="card-body text-center">
-                                <h5 class="font-weight-normal">
-                                    <a href="javascript:;">
-                                        {{ item.titulo }}
-                                    </a>
-                                </h5>
-                                <h4>Bs. {{  item.precio }}</h4>
-                                <p class="mb-0">
-                                    {{  truncarTexto(item.descripcion) }}
-                                </p>
-                                <button type="button" class="btn bg-gradient-info btn-sm mb-0 mt-3">Find out
-                                    more</button>
-                            </div>
-                        </div>
-                    </div>
+                    <Tarjeta  v-for="item in productos" :key="item.id" :producto="item" />
 
                 </div>
             </div>
