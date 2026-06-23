@@ -8,3 +8,8 @@ export const getProductos = async (params= {}) => {
     return respuesta.data
 
 }
+
+export const getProductoId = async idProducto =>{
+    const respuesta = await api.get('/productos/'+idProducto)
+    return respuesta.data
+}

@@ -96,6 +96,19 @@ const carritoStore = useCarritoStore()
                                     <p class="h6">
                                         Total: Bs. {{ carritoStore.total }}
                                     </p>
+                                    <hr class="border">
+                                    <div class="  d-flex justify-content-between gap-2">
+                                        <RouterLink :to="{ name:'Carrito'}" href="javascript:void(0);"
+                                            class="btn btn-icon  btn-sm w-100 bg-gradient-info d-lg-block mt-0 mb-0">
+                                            <i class="fas fa-shopping-cart ms-1"></i>
+                                            Carrito
+                                        </RouterLink>
+                                        <a href="javascript:void(0);"
+                                            class="btn btn-icon btn-sm w-100 bg-gradient-dark d-lg-block mt-0 mb-0">
+                                            <i class="fas fa-credit-card ms-1"></i>
+                                            Pagar
+                                        </a>
+                                    </div>
                                 </div>
 
                                 <div v-else>

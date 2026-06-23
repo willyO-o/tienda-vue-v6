@@ -29,9 +29,9 @@ const carritoStore = useCarritoStore()
             </div>
             <div class="card-body text-center">
                 <h5 class="font-weight-normal">
-                    <a href="javascript:;">
+                    <RouterLink :to="{name:'DetalleProducto', params: { id :producto.id }}">
                         {{ producto.titulo }}
-                    </a>
+                    </RouterLink>
                 </h5>
                 <h4>Bs. {{ producto.precio }}</h4>
                 <p class="mb-0">

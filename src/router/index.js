@@ -16,6 +16,16 @@ const router = createRouter({
           path:'/tienda',
           name:'Tienda',
           component:  () => import('@/modules/public/views/Tienda.vue')
+        },
+        {
+          path:'/tienda/producto/:id',
+          name:'DetalleProducto',
+          component: () => import('@/modules/public/views/DetalleProducto.vue')
+        },
+        {
+          path:'/carrito',
+          name: 'Carrito',
+          component: () => import('@/modules/public/views/Carrito.vue')
         }
         
 
