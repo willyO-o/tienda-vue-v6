@@ -8,26 +8,37 @@ const router = createRouter({
       component: () => import('@/modules/public/views/PublicLayout.vue'),
       children: [
         {
-          path:'',
+          path: '',
           name: 'Inicio',
           component: () => import('@/modules/public/views/Inicio.vue')
         },
         {
-          path:'/tienda',
-          name:'Tienda',
-          component:  () => import('@/modules/public/views/Tienda.vue')
+          path: '/tienda',
+          name: 'Tienda',
+          component: () => import('@/modules/public/views/Tienda.vue')
         },
         {
-          path:'/tienda/producto/:id',
-          name:'DetalleProducto',
+          path: '/tienda/producto/:id',
+          name: 'DetalleProducto',
           component: () => import('@/modules/public/views/DetalleProducto.vue')
         },
         {
-          path:'/carrito',
+          path: '/carrito',
           name: 'Carrito',
           component: () => import('@/modules/public/views/Carrito.vue')
+        },
+        {
+          path: '/contacto',
+          name: 'Contacto',
+          component: () => import('@/modules/public/views/Contacto.vue')
+        },
+        {
+          path: '/login',
+          name: 'Login',
+          component: () => import('@/modules/public/views/Login.vue')
+
         }
-        
+
 
       ]
     },

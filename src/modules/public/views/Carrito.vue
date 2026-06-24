@@ -102,6 +102,18 @@ const carritoStore = useCarritoStore();
 
 
                     </div>
+
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4>Resumen de Compra</h4>
+                                <p class="h3">Total: Bs {{  carritoStore.total  }}</p>
+                                
+                            </div>
+
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
