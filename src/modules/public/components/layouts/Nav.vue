@@ -1,12 +1,16 @@
 <script setup>
 
 import useCarritoStore from '@/modules/public/stores/carritoStore'
+import useUsuarioStore from '@/stores/usuarioStore';
 
 import { primeraImagen } from '@/utils/productoUtil'
 
 
 
 const carritoStore = useCarritoStore()
+
+const usuarioStore = useUsuarioStore()
+
 
 
 </script>
@@ -17,8 +21,7 @@ const carritoStore = useCarritoStore()
         <div class="row">
             <div class="col-12">
                 <nav
-                    class=" border-shadow rounded bg-white navbar navbar-expand-lg position-absolute top-0 z-index-3 w-100 shadow my-3 navbar-transparent"
-                    >
+                    class=" border-shadow rounded bg-white navbar navbar-expand-lg position-absolute top-0 z-index-3 w-100 shadow my-3 navbar-transparent">
                     <div class="container">
                         <RouterLink class="navbar-brand  text-dark " :to="{ name: 'Inicio' }" rel="tooltip"
                             title="Designed and Coded by Creative Tim" data-placement="bottom">
@@ -38,8 +41,8 @@ const carritoStore = useCarritoStore()
 
                                 <li class="nav-item ms-lg-auto">
                                     <RouterLink class="nav-link nav-link-icon me-2" :to="{ name: 'Inicio' }">
-                                        <p class="d-inline  text-dark  text-sm z-index-1 font-weight-bold" data-bs-toggle="tooltip"
-                                            data-bs-placement="bottom" title="">Inicio</p>
+                                        <p class="d-inline  text-dark  text-sm z-index-1 font-weight-bold"
+                                            data-bs-toggle="tooltip" data-bs-placement="bottom" title="">Inicio</p>
                                     </RouterLink>
                                 </li>
 
@@ -47,14 +50,14 @@ const carritoStore = useCarritoStore()
 
                                 <li class="nav-item ms-lg-auto">
                                     <RouterLink class="nav-link nav-link-icon me-2" :to="{ name: 'Tienda' }">
-                                        <p class="d-inline  text-dark text-sm z-index-1 font-weight-bold" data-bs-toggle="tooltip"
-                                            data-bs-placement="bottom" title="">Tienda</p>
+                                        <p class="d-inline  text-dark text-sm z-index-1 font-weight-bold"
+                                            data-bs-toggle="tooltip" data-bs-placement="bottom" title="">Tienda</p>
                                     </RouterLink>
                                 </li>
                                 <li class="nav-item ms-lg-auto">
                                     <RouterLink class="nav-link nav-link-icon me-2" :to="{ name: 'Contacto' }">
-                                        <p class="d-inline  text-dark text-sm z-index-1 font-weight-bold" data-bs-toggle="tooltip"
-                                            data-bs-placement="bottom" title="">Contacto</p>
+                                        <p class="d-inline  text-dark text-sm z-index-1 font-weight-bold"
+                                            data-bs-toggle="tooltip" data-bs-placement="bottom" title="">Contacto</p>
                                     </RouterLink>
                                 </li>
 
@@ -166,7 +169,16 @@ const carritoStore = useCarritoStore()
                                 </li>
 
                                 <li class="nav-item my-auto ms-3 ms-lg-0">
-                                    <RouterLink :to="{name: 'Login'}"
+
+                                    <RouterLink 
+                                     v-if="usuarioStore.isAuthenticated()"
+                                    :to="{ name: 'Dashboard' }"
+                                        class="btn btn-sm  bg-dark  text-white mb-0 me-1 mt-2 mt-md-0">
+                                        <i class="fas fa-user"></i>
+                                        Administración
+                                    </RouterLink>
+
+                                    <RouterLink v-else :to="{ name: 'Login' }"
                                         class="btn btn-sm  bg-dark  text-white mb-0 me-1 mt-2 mt-md-0">
                                         <i class="fas fa-user"></i>
                                         Login

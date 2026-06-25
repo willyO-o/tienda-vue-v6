@@ -42,6 +42,23 @@ const router = createRouter({
 
       ]
     },
+    {
+      path: '/admin',
+      component: () => import('@/modules/admin/views/AdminLayout.vue'),
+      children: [
+        {
+          path: '',
+          name: 'Dashboard',
+          component: () => import('@/modules/admin/views/Dashboard.vue'),
+        },
+        {
+          path: 'categorias',
+          name: 'Categorias',
+          component: () => import('@/modules/admin/views/Categoria.vue'),
+
+        }
+      ]
+    }
 
 
   ],

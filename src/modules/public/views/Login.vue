@@ -1,15 +1,26 @@
 <script setup>
 
-import { reactive } from 'vue';
+import { reactive, ref } from 'vue';
 
-import { login } from '@/services/authService'
+import { login, getUser } from '@/services/authService'
 
 import loginValidationSchema from '@/schemas/loginValidationSchema'
 
 import { Form, Field, ErrorMessage } from 'vee-validate';
 
+import useUsuarioStore from '@/stores/usuarioStore';
+
 import Swal from 'sweetalert2';
 
+import { useRouter } from 'vue-router';
+
+
+
+
+const usuarioStore = useUsuarioStore()
+const router = useRouter()
+
+const procesando = ref(false)
 
 const credenciales = reactive({
     email: "administrador@gmail.com",
@@ -19,15 +30,34 @@ const credenciales = reactive({
 
 const autenticar = async () => {
 
+    procesando.value = true
     try {
         const resultado = await login(credenciales)
 
-        console.log("resultado login: ", resultado);
 
-        Swal.fire("Bienvenido", "Has iniciado sesión correctamente", "success")
+
+        const accessToken = resultado.access_token.token
+
+        const refreshToken = resultado.refresh_token.token
+
+        usuarioStore.setSesion(accessToken, refreshToken)
+
+        const user = await getUser()
+
+        const { avatar, email } = user
+
+        usuarioStore.setUser({ avatar, email })
+
+        setTimeout(() => {
+            procesando.value = false
+            router.push({ name: 'Dashboard' })
+        }, 1500);
+
+        Swal.fire("Bienvenido:  " + email, "Has iniciado sesión correctamente", "success")
 
     } catch (error) {
         Swal.fire("Error", "Usuario o contraseña incorrectos", "error")
+        procesando.value = false
 
     }
 
@@ -76,7 +106,8 @@ const autenticar = async () => {
                                 <div class="my-3">
                                     <label class="form-label">Correo</label>
                                     <div class="input-group input-group-outline ">
-                                        <Field type="email" v-model="credenciales.email" name="email" class="form-control" />
+                                        <Field type="email" v-model="credenciales.email" name="email"
+                                            class="form-control" />
                                     </div>
                                     <ErrorMessage name="email" class="text-danger small" />
                                 </div>
@@ -86,7 +117,8 @@ const autenticar = async () => {
                                     <label class="form-label">Contraseña</label>
 
                                     <div class="input-group input-group-outline ">
-                                        <Field type="password" v-model="credenciales.password" name="password" class="form-control" />
+                                        <Field type="password" v-model="credenciales.password" name="password"
+                                            class="form-control" />
                                     </div>
                                     <ErrorMessage name="password" class="text-danger small" />
 
@@ -94,8 +126,10 @@ const autenticar = async () => {
 
 
                                 <div class="text-center">
-                                    <button type="submit" class="btn bg-gradient-dark w-100 my-4 mb-2">
-                                        Iniciar Sesión
+                                    <button type="submit" :class="{ 'disabled': procesando }"
+                                        class="btn bg-gradient-dark w-100 my-4 mb-2">
+                                        <i class="fas fa-spinner fa-spin" v-if="procesando"></i>
+                                        {{ procesando ? 'Procesando...' : 'Iniciar Sesión' }}
                                     </button>
                                 </div>
                                 <p class="mt-4 text-sm text-center">

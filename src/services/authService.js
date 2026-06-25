@@ -9,3 +9,11 @@ export const login = async (credenciales ) => {
 
 
 }
+
+
+export const getUser = async () => {
+    const respuesta = await api.get('/auth/me');
+
+    return respuesta.data
+    
+}
