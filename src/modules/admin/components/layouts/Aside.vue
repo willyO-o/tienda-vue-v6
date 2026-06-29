@@ -39,6 +39,12 @@ console.log(route);
                     </RouterLink>
                 </li>
                 <li class="nav-item">
+                    <RouterLink :class="route.name == 'Productos' ?  'active bg-gradient-dark text-white': 'text-dark'" class="nav-link " :to="{name:'Productos'}">
+                        <i class="material-symbols-rounded opacity-5">table_view</i>
+                        <span class="nav-link-text ms-1">Productos</span>
+                    </RouterLink>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link text-dark" href="../pages/billing.html">
                         <i class="material-symbols-rounded opacity-5">receipt_long</i>
                         <span class="nav-link-text ms-1">Billing</span>

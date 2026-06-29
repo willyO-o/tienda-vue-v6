@@ -12,6 +12,8 @@
     "@fortawesome/fontawesome-free": "^7.2.0",
     "@vueuse/core": "^14.3.0",
     "axios": "^1.18.0",
+    "axios-auth-refresh": "^5.0.2",
+    "bootstrap": "^5.3.8",
     "pinia": "^3.0.4",
     "pinia-plugin-persistedstate": "^4.7.1",
     "sweetalert2": "^11.26.25",
