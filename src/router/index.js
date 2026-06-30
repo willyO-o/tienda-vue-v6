@@ -57,9 +57,21 @@ const router = createRouter({
           path: "productos",
           name: "Productos",
           component: () => import("@/modules/admin/views/Productos.vue"),
-
+        },
+        {
+          path: "productos/crear",
+          name: "CrearProducto",
+          component: () => import("@/modules/admin/views/FormProducto.vue"),
         },
       ],
+      beforeEnter: (to, from) => {
+        const usuario = localStorage.getItem("usuario");
+        const refreshToken = localStorage.getItem("refreshToken");
+
+        if (!usuario || !refreshToken) {
+          return "/login";
+        }
+      },
     },
   ],
 });

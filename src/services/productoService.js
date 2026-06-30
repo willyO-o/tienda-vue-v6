@@ -1,15 +1,17 @@
-import api from '@/services/api'
+import api from "@/services/api";
 
+export const getProductos = async (params = {}) => {
+  const respuesta = await api.get("/productos", { params });
 
-export const getProductos = async (params= {}) => {
+  return respuesta.data;
+};
 
-    const respuesta = await api.get('/productos', {params})
+export const getProductoId = async (idProducto) => {
+  const respuesta = await api.get("/productos/" + idProducto);
+  return respuesta.data;
+};
 
-    return respuesta.data
-
-}
-
-export const getProductoId = async idProducto =>{
-    const respuesta = await api.get('/productos/'+idProducto)
-    return respuesta.data
-}
+export const createProducto = async (datos) => {
+  const respuesta = await api.post("/productos", datos);
+  return respuesta.data;
+};

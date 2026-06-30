@@ -4,6 +4,27 @@ import Nav from '@/modules/admin/components/layouts/Nav.vue'
 import Footer from '@/modules/admin/components/layouts/Footer.vue'
 import Settings from '@/modules/admin/components/layouts/Settings.vue';
 
+import useUsuarioStore from '@/stores/usuarioStore'
+
+import { watch } from 'vue'
+
+import { useRouter } from 'vue-router'
+
+const usuarioStore = useUsuarioStore()
+const router = useRouter()
+
+
+// watch([usuarioStore.usuario, usuarioStore.refreshToken], ([usuario, refreshToken]) => {
+
+//     console.log("desde watch",usuario, refreshToken);
+    
+//     if (!usuario  || !refreshToken ) {
+//         router.push({ name: 'Login' })
+//     }
+// })
+
+
+
 </script>
 
 

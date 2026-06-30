@@ -17,3 +17,12 @@ export const getUser = async () => {
     return respuesta.data
     
 }
+
+
+export const logout = async () => {
+
+    const respuesta = await api.post('/auth/logout',{refresh_token: localStorage.getItem('refreshToken')})
+
+    return respuesta.data
+
+}

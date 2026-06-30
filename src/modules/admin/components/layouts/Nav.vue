@@ -1,4 +1,40 @@
 <script setup>
+
+import { logout } from '@/services/authService'
+
+import { confimarAccion } from '@/utils/alertUtil'
+
+import Swal from 'sweetalert2'
+
+import useUsuarioStore from '@/stores/usuarioStore'
+
+const usuarioStore = useUsuarioStore()
+
+const cerrarSesion = async () => {
+
+    const confirmacion = await confimarAccion("Cerrar sesión", '¿Desea cerrar sesión?', "Si, cerrar sesión")
+
+    if (!confirmacion) return
+
+    usuarioStore.clearSesion()
+    try {
+        const resultado = await logout()
+
+
+
+
+        Swal.fire("Sesión cerrada", resultado.message, "success")
+
+        window.location.href = "/login"
+
+    } catch (error) {
+        // console.log(error)
+        Swal.fire("Error", "Ocurruio un errror, intenete nuevamente", "error")
+    }
+
+
+}
+
 </script>
 
 
@@ -21,11 +57,7 @@
                     </div>
                 </div>
                 <ul class="navbar-nav d-flex align-items-center  justify-content-end">
-                    <li class="nav-item d-flex align-items-center">
-                        <a class="btn btn-outline-primary btn-sm mb-0 me-3" target="_blank"
-                            href="https://www.creative-tim.com/builder?ref=navbar-material-dashboard">Online
-                            Builder</a>
-                    </li>
+
                     <li class="mt-1">
                         <a class="github-button" href="https://github.com/creativetimofficial/material-dashboard"
                             data-icon="octicon-star" data-size="large" data-show-count="true"
@@ -129,8 +161,14 @@
                         </ul>
                     </li>
                     <li class="nav-item d-flex align-items-center">
-                        <a href="../pages/sign-in.html" class="nav-link text-body font-weight-bold px-0">
+                        <a href="../pages/sign-in.html" class="nav-link text-body font-weight-bold px-0 me-3">
                             <i class="material-symbols-rounded">account_circle</i>
+                        </a>
+                    </li>
+                    <li class="nav-item d-flex align-items-center">
+                        <a class="btn btn-outline-primary btn-sm mb-0 me-3" href="javascript:void(0);"
+                            @click="cerrarSesion">
+                            Cerrar Sesión
                         </a>
                     </li>
                 </ul>
