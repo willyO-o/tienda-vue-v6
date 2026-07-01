@@ -15,3 +15,19 @@ export const createProducto = async (datos) => {
   const respuesta = await api.post("/productos", datos);
   return respuesta.data;
 };
+
+
+export const updateProducto = async (idProducto, datos) => {
+  const respuesta = await api.put("/productos/"+ idProducto, datos);
+  return respuesta.data;
+
+
+}
+
+
+export const deleteProducto = async idProducto => {
+
+  const respuesta = await api.delete('/productos/' + idProducto)
+  return respuesta.data;
+
+}

@@ -21,9 +21,20 @@ import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css
 const FilePond = vueFilePond(FilePondPluginFileValidateType, FilePondPluginImagePreview, FilePondPluginFileEncode);
 
 
-import { createProducto } from '@/services/productoService' 
+import { useRoute, useRouter } from 'vue-router'
+
+import { createProducto, getProductoId, updateProducto } from '@/services/productoService'
+
+import { imagenesArray } from '@/utils/productoUtil'
+
+import Swal from 'sweetalert2';
 
 
+const route = useRoute()
+const router = useRouter()
+
+
+const filepondRef = ref(null)
 
 const datosForm = reactive({
     titulo: "iPhone 13",
@@ -58,7 +69,6 @@ const agregarImagen = (error, file) => {
 }
 
 const quitarImagen = (error, file) => {
-    console.log(file.id);
 
 
     if (!error) {
@@ -81,17 +91,74 @@ const guardarProducto = async () => {
 
     try {
 
-        datosForm.imagen =  JSON.stringify(imagenes.value.map(img => img.data))
+        datosForm.imagen = JSON.stringify(imagenes.value.map(img => img.data))
 
-        const resultado = await createProducto(datosForm)
+        let resultado = null
 
-        console.log("registro: ",resultado );
-        
+        if (route.params.id) {
+            resultado = await updateProducto(route.params.id, datosForm)
+        } else {
+            resultado = await createProducto(datosForm)
+        }
 
-    }catch (error) {
+        Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        }).fire({
+            icon: "success",
+            title: resultado.message || "Producto guardado correctamente"
+        });
 
+        router.push({ name: 'Productos'})
+
+
+    } catch (error) {
+
+        Swal.fire("Error", error.message || "ocurrio un error ")
 
     }
+
+
+}
+
+
+
+const cargarProducto = async (idProducto) => {
+
+
+
+    const resultado = await getProductoId(idProducto)
+
+    console.log(resultado);
+
+    datosForm.titulo = resultado.titulo
+    datosForm.descripcion = resultado.descripcion
+    datosForm.precio = resultado.precio
+    datosForm.stock = resultado.stock
+    datosForm.categoria_id = resultado.categoria_id
+
+    const imgResult = imagenesArray(resultado.imagen)
+
+    const mimeTypes = {
+        'image/jpeg': 'jpeg',
+        'image/jpg': 'jpg',
+        'image/png': 'png',
+        'image/webp': 'webp',
+        'image/avif': 'avif'
+    }
+
+    imgResult.forEach(img => {
+
+        filepondRef.value.addFile(img,)
+    })
+
 
 
 }
@@ -101,6 +168,17 @@ const guardarProducto = async () => {
 onMounted(() => {
 
     cargarCategorias()
+
+    if (route.params.id) {
+        cargarProducto(route.params.id)
+    }
+
+
+    // console.log("referencia", filepondRef.value);
+
+
+
+
 })
 
 
@@ -164,13 +242,12 @@ onMounted(() => {
                             <div class="col-md-12 my-3">
                                 <label class="form-label">Imagenes</label>
 
-                                <file-pond v-on:init="() => console.log('FilePond initialized')"
+                                <file-pond ref="filepondRef" v-on:init="() => console.log('FilePond initialized')"
                                     @addfile="agregarImagen" @removefile="quitarImagen" :required="true"
                                     :allow-multiple="true" :allowFileTypeValidation="true"
                                     :acceptedFileTypes="['image/png', 'image/jpeg', 'image/jpg', 'image/webp', 'image/avif']"
-                                    :allow-file-encode="true" 
-                                    label-idle="<i class='fas fa-upload'></i> <br>Arrastra y suelta tus imágenes o haz <u>clic aqui</u> para seleccionarlas"
-                                    />
+                                    :allow-file-encode="true"
+                                    label-idle="<i class='fas fa-upload'></i> <br>Arrastra y suelta tus imágenes o haz <u>clic aqui</u> para seleccionarlas" />
 
                                 <div v-if="errorImg" class="text-danger small">
                                     Por favor agregue al menos una imagen para el producto.

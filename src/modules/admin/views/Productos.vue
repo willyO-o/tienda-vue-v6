@@ -2,10 +2,16 @@
 
 import { ref, onMounted } from 'vue'
 
-import { getProductos } from '@/services/productoService'
+import { getProductos, getProductoId, deleteProducto } from '@/services/productoService'
+import { formatDate } from '@/utils/dateUtil'
+import { confimarAccion } from '@/utils/alertUtil'
+import Swal  from 'sweetalert2'
 
-import { primeraImagen } from '@/utils/productoUtil'
+import { primeraImagen, imagenesArray } from '@/utils/productoUtil'
 import Paginador from '@/components/Paginador.vue'
+
+import { Modal } from 'bootstrap'
+import Carrucel from '@/components/Carrucel.vue'
 
 
 
@@ -44,6 +50,66 @@ const cargarProductos = async (pagina = 1) => {
 }
 
 
+const datosProducto = ref({
+    categoria: "",
+    categoria_id: "",
+    creado_el: "",
+    descripcion: "",
+    id: 0,
+    imagen: "",
+    precio: "",
+    stock: "",
+    titulo: "",
+})
+
+const modalProducto = ref(null)
+
+const verDetalles = async id => {
+
+    const resultado = await getProductoId(id)
+
+    datosProducto.value = resultado
+
+    if (!modalProducto.value) {
+
+        modalProducto.value = new Modal(document.querySelector("#modalProducto"))
+
+    }
+
+    modalProducto.value.show()
+
+}
+
+
+
+const eliminarProducto =  async id => {
+
+    const confirmacion =  await confimarAccion('Confimar eliminación', '¿Está seguro de eliminar este producto?')
+
+    if(!confirmacion) return
+
+
+    const resultado = await deleteProducto(id)
+
+    productos.value = productos.value.filter(prod => prod.id != id)
+
+    Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+        }
+    }).fire({
+        icon: "success",
+        title: resultado.message || "Producto eliminado correctamente"
+    });
+
+}
+
 onMounted(() => {
 
     cargarProductos()
@@ -67,9 +133,9 @@ onMounted(() => {
                 <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                     <div class="bg-gradient-dark shadow-dark border-radius-lg pt-4 pb-3 d-flex justify-content-between">
                         <h6 class="text-white text-capitalize ps-3">Listado de productos</h6>
-                        <RouterLink :to="{ name: 'CrearProducto'}" class="btn btn-primary  me-3">
+                        <RouterLink :to="{ name: 'CrearProducto' }" class="btn btn-primary  me-3">
                             Agregar Nuevo
-                        </RouterLink> 
+                        </RouterLink>
                     </div>
                 </div>
                 <div class="card-body px-0 pb-2">
@@ -131,17 +197,20 @@ onMounted(() => {
                                     </td>
 
                                     <td class="align-middle">
-                                        <a href="javascript:void(0);" class="text-secondary font-weight-bold text-xs"
-                                            data-toggle="tooltip" data-original-title="Edit user">
+                                        <a href="javascript:void(0);" @click="verDetalles(producto.id)"
+                                            class="text-secondary font-weight-bold text-xs" data-toggle="tooltip"
+                                            data-original-title="Ver detalles">
                                             <i class="fas fa-eye"></i>
                                         </a>
-                                        <a href="javascript:void(0);"
+                                        <RouterLink :to="{name: 'EditarProducto',params: {id:producto.id}}"
                                             class="text-secondary mx-2 font-weight-bold text-xs" data-toggle="tooltip"
-                                            data-original-title="Edit user">
+                                            data-original-title="Editar producto">
                                             <i class="fas fa-edit"></i>
-                                        </a>
-                                        <a href="javascript:void(0);" class="text-secondary font-weight-bold text-xs"
-                                            data-toggle="tooltip" data-original-title="Edit user">
+                                        </RouterLink>
+                                        <a 
+                                        @click="eliminarProducto(producto.id)"
+                                        href="javascript:void(0);" class="text-secondary font-weight-bold text-xs"
+                                            data-toggle="tooltip" data-original-title="Eliminar producto">
                                             <i class="fas fa-trash"></i>
                                         </a>
                                     </td>
@@ -172,6 +241,77 @@ onMounted(() => {
                         </div>
 
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalProducto" tabindex="-1" role="dialog" aria-labelledby="modalProductoLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title font-weight-normal" id="modalProductoLabel">Detalles del Producto</h5>
+                    <button type="button" class="btn-close text-dark" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-0">
+                    <div class="card ">
+
+
+                        <div class="card-header text-center pt-4 pb-3">
+                            <h4 class="font-weight-bold mt-2">
+                                {{ datosProducto.titulo }}
+                            </h4>
+                        </div>
+                        <div class="card-body text-lg-start text-center pt-0">
+
+                            <div class="row">
+                                <Carrucel class="col-md-8" :imagenes="imagenesArray(datosProducto.imagen)" />
+                            </div>
+
+
+                            <div class="">
+                                <span>Descripción:</span>
+                                <p class="">{{  datosProducto.descripcion }}</p>
+                            </div>
+
+                            <div class="d-flex justify-content-lg-start justify-content-center p-2">
+                                <b>Categoria: </b>
+                                <span class="ps-3">{{  datosProducto.categoria }} </span>
+                            </div>
+
+                            <div class="d-flex justify-content-lg-start justify-content-center p-2">
+                                <b>Precio: </b>
+                                <span class="ps-3">{{  datosProducto.precio }} </span>
+                            </div>
+
+                            <div class="d-flex justify-content-lg-start justify-content-center p-2">
+                                <b>Stock: </b>
+                                <span class="ps-3">{{  datosProducto.stock }} unidades </span>
+                            </div>
+
+                            <div class="d-flex justify-content-lg-start justify-content-center p-2">
+                                <b>Creado el:</b>
+                                <span class="ps-3">{{  formatDate(datosProducto.creado_el) }} </span>
+                            </div>
+
+               
+
+                            <RouterLink :to="{name: 'DetalleProducto', params: { id: datosProducto.id }}" target="_blank" class="btn btn-icon bg-gradient-dark d-lg-block mt-3 mb-0">
+                                Ver en tienda
+                                <i class="fas fa-arrow-right ms-1"></i>
+                            </RouterLink>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>

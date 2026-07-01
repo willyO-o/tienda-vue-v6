@@ -63,6 +63,11 @@ const router = createRouter({
           name: "CrearProducto",
           component: () => import("@/modules/admin/views/FormProducto.vue"),
         },
+        {
+          path: "productos/:id/editar",
+          name: "EditarProducto",
+          component: () => import("@/modules/admin/views/FormProducto.vue"),
+        }
       ],
       beforeEnter: (to, from) => {
         const usuario = localStorage.getItem("usuario");
