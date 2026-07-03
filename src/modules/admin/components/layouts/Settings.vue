@@ -1,20 +1,24 @@
 <script setup>
+import { ref } from "vue";
+
+const abrirMenu = ref(false);
+
 </script>
 
 
 <template>
-    <div class="fixed-plugin">
-        <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
+    <div class="fixed-plugin " :class="{ 'show': abrirMenu}">
+        <a @click="abrirMenu = true" class="fixed-plugin-button text-dark position-fixed px-3 py-2">
             <i class="material-symbols-rounded py-2">settings</i>
         </a>
-        <div class="card shadow-lg">
+        <div class="card shadow-lg" >
             <div class="card-header pb-0 pt-3">
                 <div class="float-start">
                     <h5 class="mt-3 mb-0">Material UI Configurator</h5>
                     <p>See our dashboard options.</p>
                 </div>
                 <div class="float-end mt-4">
-                    <button class="btn btn-link text-dark p-0 fixed-plugin-close-button">
+                    <button class="btn btn-link text-dark p-0 fixed-plugin-close-button" @click="abrirMenu = false">
                         <i class="material-symbols-rounded">clear</i>
                     </button>
                 </div>

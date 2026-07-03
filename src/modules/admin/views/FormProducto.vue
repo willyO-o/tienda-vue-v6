@@ -136,7 +136,6 @@ const cargarProducto = async (idProducto) => {
 
     const resultado = await getProductoId(idProducto)
 
-    console.log(resultado);
 
     datosForm.titulo = resultado.titulo
     datosForm.descripcion = resultado.descripcion
@@ -146,13 +145,6 @@ const cargarProducto = async (idProducto) => {
 
     const imgResult = imagenesArray(resultado.imagen)
 
-    const mimeTypes = {
-        'image/jpeg': 'jpeg',
-        'image/jpg': 'jpg',
-        'image/png': 'png',
-        'image/webp': 'webp',
-        'image/avif': 'avif'
-    }
 
     imgResult.forEach(img => {
 

@@ -36,7 +36,7 @@ const enviarMensaje = async () => {
 
 
 <template>
-    <section>
+    <section class="mt-5 pt-5">
         <div class="page-header min-vh-100">
             <div class="container">
                 <div class="row">

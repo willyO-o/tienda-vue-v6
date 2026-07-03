@@ -31,11 +31,13 @@ const router = createRouter({
           path: "/contacto",
           name: "Contacto",
           component: () => import("@/modules/public/views/Contacto.vue"),
+          meta: { hiddenBanner: true }
         },
         {
           path: "/login",
           name: "Login",
           component: () => import("@/modules/public/views/Login.vue"),
+          meta: { hiddenBanner: true },
         },
       ],
     },
@@ -67,6 +69,11 @@ const router = createRouter({
           path: "productos/:id/editar",
           name: "EditarProducto",
           component: () => import("@/modules/admin/views/FormProducto.vue"),
+        },
+        {
+          path: "usuarios",
+          name: "Usuarios",
+          component: () => import("@/modules/admin/views/Usuarios.vue"),
         }
       ],
       beforeEnter: (to, from) => {

@@ -10,18 +10,22 @@ import { watch } from 'vue'
 
 import { useRouter } from 'vue-router'
 
+import '@/assets/css/material-dashboard.css'
+
+
 const usuarioStore = useUsuarioStore()
 const router = useRouter()
 
 
-// watch([usuarioStore.usuario, usuarioStore.refreshToken], ([usuario, refreshToken]) => {
+watch(()=>[usuarioStore.usuario, usuarioStore.refreshToken], ([usuario, refreshToken]) => {
 
-//     console.log("desde watch",usuario, refreshToken);
     
-//     if (!usuario  || !refreshToken ) {
-//         router.push({ name: 'Login' })
-//     }
-// })
+    if (!usuario  || !refreshToken ) {
+
+        usuarioStore.clearSesion()
+        router.push({ name: 'Login' })
+    }
+})
 
 
 
